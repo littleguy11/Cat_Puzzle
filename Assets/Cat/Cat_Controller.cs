@@ -1,27 +1,64 @@
+using System;
 using UnityEngine;
 
 public class Cat_Controller : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
-    private GameObject target;
+    private GameObject target = null;
     
     [SerializeField] float acceleration = 10f;
     [SerializeField] float drag = 2f;
-    [SerializeField] Rigidbody2D rb;
-        
+    Rigidbody2D rb;
+    SpriteRenderer sr;
     
+    private Vector3 startingPosition = Vector3.zero;
+    
+    //bool startGame = false;
+
+    private void Awake()
+    {
+        //Set starting position the position of the cat
+        startingPosition = transform.position;
+    }
+
     void Start()
     {
-        target = FindClosestByTag();
         
         rb = GetComponent<Rigidbody2D>();
         rb.linearDamping = drag;
+        
+        sr = GetComponent<SpriteRenderer>();
     }
     
     void FixedUpdate()
     {
-        if (target != null)
+        //Set startGame to the bool in the Game_Manager script
+
+        print(target);
+        if (Game_Manager.Instance.startGame)
+        {
+            //placeholder for animations
+            sr.color = Color.red;
+
+            //find the closest target
+            if (target == null)
+            {
+                target = FindClosestByTag();
+            }
+        }
+        else
+        {
+            //placeholder for animations
+            sr.color = Color.purple;
+            
+            //reset position and target
+            transform.position = startingPosition;
+            target = null;
+        }
+        
+        //If the target is found and if the game has started move to the target 
+        if (target != null && Game_Manager.Instance.startGame)
         {
             Vector3 direction = (target.transform.position - transform.position).normalized;
             
@@ -29,13 +66,18 @@ public class Cat_Controller : MonoBehaviour
         }
     }
 
+    //Find the closest object with the tag "Item"
     public GameObject FindClosestByTag()
     {
+        //make a list of all the GameObjects with the tag "Item"
         GameObject[] gos = GameObject.FindGameObjectsWithTag("Item");
+        
+        //making all the variables needed
         GameObject closest = null;
         float distance = Mathf.Infinity;
         Vector3 position = transform.position;
 
+        //goes through all the GameObjects in the list and finds the closest one
         foreach (GameObject go in gos)
         {
             Vector3 diff = go.transform.position - position;
@@ -46,6 +88,7 @@ public class Cat_Controller : MonoBehaviour
                 distance = curDistance;
             }
         }
+        //Returns the closest "Item"
         return closest;
     }
 }
