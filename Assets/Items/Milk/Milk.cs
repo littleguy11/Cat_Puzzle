@@ -33,6 +33,7 @@ private Rigidbody2D rb;
             if (isReset)
             {
                 startPosition = transform.position;
+                rb.gravityScale = 1;
                 isReset = false;
             }
             return;
@@ -41,6 +42,8 @@ private Rigidbody2D rb;
         if(!Game_Manager.Instance.startGame && !isReset)
         {
             transform.position = startPosition;
+            rb.gravityScale = 0;
+            rb.linearVelocity = Vector2.zero;
             isReset = true;
         }
 

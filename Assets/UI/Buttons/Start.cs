@@ -8,6 +8,7 @@ public class Start : MonoBehaviour
   {
   }
   
+  //when button is clicked toggle game start
   public void Clicked()
   {
     if (Game_Manager.Instance.startGame)

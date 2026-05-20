@@ -38,9 +38,6 @@ public class Cat_Controller : MonoBehaviour
         print(target);
         if (Game_Manager.Instance.startGame)
         {
-            //placeholder for animations
-            sr.color = Color.red;
-
             //find the closest target
             if (target == null)
             {
@@ -63,6 +60,9 @@ public class Cat_Controller : MonoBehaviour
             Vector3 direction = (target.transform.position - transform.position).normalized;
             
             rb.AddForce(direction * acceleration);
+            
+            //placeholder for animations
+            sr.color = Color.red;
         }
     }
 
