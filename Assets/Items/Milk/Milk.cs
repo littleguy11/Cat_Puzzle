@@ -38,7 +38,7 @@ private Rigidbody2D rb;
             }
             return;
         }
-        //resets the items position
+        //resets the items position and velocity
         if(!Game_Manager.Instance.startGame && !isReset)
         {
             transform.position = startPosition;

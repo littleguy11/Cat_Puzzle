@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class Cat_Controller : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-
     private GameObject target = null;
     
     [SerializeField] float acceleration = 10f;
@@ -58,6 +56,7 @@ public class Cat_Controller : MonoBehaviour
         if (target != null && Game_Manager.Instance.startGame)
         {
             Vector3 direction = (target.transform.position - transform.position).normalized;
+            direction.y = 0;
             
             rb.AddForce(direction * acceleration);
             
