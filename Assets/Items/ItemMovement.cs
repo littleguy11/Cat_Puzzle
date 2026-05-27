@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 
-public class Milk : MonoBehaviour
+public class ItemMovement : MonoBehaviour
 {
 private Vector3 mousePos;
 private Vector3 offset;
@@ -35,16 +35,18 @@ private Rigidbody2D rb;
                 startPosition = transform.position;
                 rb.gravityScale = 1;
                 isReset = false;
+                rb.simulated = true;
             }
             return;
         }
-        //resets the items position and velocity
+        //resets the item's position and velocity
         if(!Game_Manager.Instance.startGame && !isReset)
         {
             transform.position = startPosition;
             rb.gravityScale = 0;
             rb.linearVelocity = Vector2.zero;
             isReset = true;
+            rb.simulated = false;
         }
 
         //get mouse position
@@ -52,28 +54,25 @@ private Rigidbody2D rb;
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mousePos);
         mouseWorldPos.z = 0;
         
-        //get the distance of the mouse to milk
+        //get the distance of the mouse to item
         distance = (mouseWorldPos - transform.position).sqrMagnitude;
         
         //save the offset
-        if (Mouse.current.leftButton.wasPressedThisFrame)
+        if (Mouse.current.leftButton.wasPressedThisFrame && distance < 0.3f)
         {
-            offset = transform.position - mouseWorldPos;
-        }
-        
-        //if the mouse is over milk and left mouse button is clicked the milk will follow the mouse
-        if (Mouse.current.leftButton.isPressed && distance < 0.3f)
-        {
+            rb.simulated = true;
             canMove = true;
+            offset = transform.position - mouseWorldPos;
         }
 
         //if the player stops holding left click canMove will be set to false
         if (Mouse.current.leftButton.wasReleasedThisFrame)
         {
             canMove = false;
+            rb.simulated = false;
         }
         
-        // allows the player to move the milk if canMove is true
+        // allows the player to move the item if canMove is true
         if (canMove)
         {
             // Calculate where the object SHOULD be
@@ -81,6 +80,15 @@ private Rigidbody2D rb;
         
             // Move via physics so it stops at walls
             rb.MovePosition(targetPosition);
+            
+            //allow the player to move the object
+            
+        }
+        else
+        {
+            //Stop it from floating away while editing the level
+            
+            rb.linearVelocity = Vector2.zero;
         }
         
     }
