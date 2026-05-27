@@ -69,7 +69,20 @@ public class Cat_Controller : MonoBehaviour
             {
                 rb.AddForce(direction * acceleration * 4);
             }
+
+            if (target != null)
+            {
+                RaycastHit2D rayHit = Physics2D.Raycast(transform.position,direction,(target.transform.position - transform.position).magnitude,layerMask);
+                print(rayHit.transform.tag);
+                //if (rayHit.transform.tag != "Item")
+               // {
+                    target = FindClosestByTag();
+      
+                //}
+                Debug.DrawLine(transform.position,target.transform.position,Color.orange);
+            }
             
+           
             
             //placeholder for animations
             sr.color = Color.red;
