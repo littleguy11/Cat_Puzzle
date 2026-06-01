@@ -14,8 +14,6 @@ public class Cat_Controller : MonoBehaviour
     SpriteRenderer sr;
     
     private Vector3 startingPosition = Vector3.zero;
-    
-    //bool startGame = false;
 
     private void Awake()
     {
@@ -35,8 +33,7 @@ public class Cat_Controller : MonoBehaviour
     void FixedUpdate()
     {
 
-        //Set startGame to the bool in the Game_Manager script
-        
+        //Checks if the game has started
         if (Game_Manager.Instance.startGame)
         {
             //find the closest target
@@ -45,6 +42,7 @@ public class Cat_Controller : MonoBehaviour
                 target = FindClosestByTag();
             }
         }
+        //if the game has not started or been reset. Reset the positions
         else
         {
             //placeholder for animations
@@ -70,19 +68,19 @@ public class Cat_Controller : MonoBehaviour
                 rb.AddForce(direction * acceleration * 4);
             }
 
+            
+            //checks if the cat can see the item it is moving to
             if (target != null)
             {
                 RaycastHit2D rayHit = Physics2D.Raycast(transform.position,direction,(target.transform.position - transform.position).magnitude,layerMask);
-                print(rayHit.transform.tag);
-                //if (rayHit.transform.tag != "Item")
-               // {
+                if (rayHit.transform.tag != "Item")
+                {
                     target = FindClosestByTag();
       
-                //}
+                }
                 Debug.DrawLine(transform.position,target.transform.position,Color.orange);
             }
             
-           
             
             //placeholder for animations
             sr.color = Color.red;
